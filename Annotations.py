@@ -133,7 +133,7 @@ class AnnotationList (object):
 
         logger.debug('reading annotations in standard format from %s' % self.filename)
 
-        regexGene = re.compile ('gene_name \"([^\"]+)\"\;')
+        regexGene = re.compile ('gene_id \"([^\"]+)\"\;')
         regexTran = re.compile ('transcript_name \"([^\"]+)\"\;')
         regexTID  = re.compile ('transcript_id \"([^\"]+)\"\;')
         regexExon = re.compile ('exon_number \"?(\d+)\"?\;')         # some files have quotes around exon number, some don't

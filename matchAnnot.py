@@ -229,7 +229,7 @@ def main ():
 
     logger.debug('finished')
 
-def matchTranscripts (readExons, gene):
+def matchTranscripts (readExons, gene, print_results=False):
     '''
     Given the list of annotated transcripts for a gene of interest,
     compare our isoform's exons to the exons of each transcript. Look for
@@ -280,22 +280,22 @@ def matchTranscripts (readExons, gene):
         bestScore.update (2, bestHits.which)
 
     # Now we print the results:
+    if print_results:
+        for ix, tran in enumerate (gene):
 
-    for ix, tran in enumerate (gene):
+            print 'tr:       %-20s  sc: %d  ex: %2d  %5d  id: %-20s   %s' \
+                % (tran.name, scores[ix], tran.numChildren(), tran.length, tran.ID, strings[ix])
 
-        print 'tr:       %-20s  sc: %d  ex: %2d  %5d  id: %-20s   %s' \
-            % (tran.name, scores[ix], tran.numChildren(), tran.length, tran.ID, strings[ix])
+            if scores[ix] >= 2:
+                showCoords (readExons, tran)
 
-        if scores[ix] >= 2:
-            showCoords (readExons, tran)
+        # If we found no suitable transcript, we never call showCoords. At
+        # least print the exons once.
 
-    # If we found no suitable transcript, we never call showCoords. At
-    # least print the exons once.
-
-    if scores[bestScore.which] == 0:
-        print 'tr:       (none)'
-        for ixR, exonR in enumerate(readExons):
-            printReadExon (ixR, exonR)
+        if scores[bestScore.which] == 0:
+            print 'tr:       (none)'
+            for ixR, exonR in enumerate(readExons):
+                printReadExon (ixR, exonR)
 
     return gene[bestScore.which], scores[bestScore.which]     # return best transcript and score
 
